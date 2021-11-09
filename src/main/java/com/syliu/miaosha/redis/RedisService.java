@@ -125,7 +125,7 @@ public class RedisService {
         else return JSON.toJSONString(value);
     }
 
-    private void returnToPool(Jedis resource) {
+    public static void returnToPool(Jedis resource) {
         if(resource!=null){
             resource.close();
         }

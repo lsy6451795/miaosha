@@ -1,5 +1,6 @@
 package com.syliu.miaosha.controller;
 
+import com.syliu.miaosha.RateLimit.RateLimit;
 import com.syliu.miaosha.Result.CodeMsg;
 import com.syliu.miaosha.Result.Result;
 import com.syliu.miaosha.domain.MiaoshaOrder;
@@ -66,6 +67,7 @@ public class MiaoshaController implements InitializingBean {
 
     @RequestMapping(value = "/{path}/do_miaosha",method = RequestMethod.POST)
     @ResponseBody
+    @RateLimit(capacity = 10)
     public Result<Integer> do_miaosha(Model model, MiaoshaUser user, @RequestParam("goodsId")long goodsId,
                                       @PathVariable("path")String path){
         model.addAttribute("user",user);

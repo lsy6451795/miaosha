@@ -1,5 +1,6 @@
 package com.syliu.miaosha.controller;
 
+import com.syliu.miaosha.RateLimit.RateLimit;
 import com.syliu.miaosha.Result.Result;
 import com.syliu.miaosha.domain.MiaoshaUser;
 import com.syliu.miaosha.redis.GoodsKey;
@@ -49,6 +50,7 @@ public class GoodsController {
     * */
     @RequestMapping("/to_list")
     @ResponseBody
+    @RateLimit
     public String to_list( HttpServletRequest request, HttpServletResponse response,Model model, MiaoshaUser user){
         List<GoodsVo> goodsVos = goodsService.listGoodsVo();
         model.addAttribute("user",user);
@@ -70,6 +72,7 @@ public class GoodsController {
     }
     @RequestMapping("/detail/{goodsId}")
     @ResponseBody
+    @RateLimit
     public Result<GoodsDetailVo> detail(HttpServletRequest request, HttpServletResponse response, Model model, MiaoshaUser user, @PathVariable("goodsId")long goodsId){
 
         GoodsVo goods=goodsService.listGoodsVoByGoodesId(goodsId);

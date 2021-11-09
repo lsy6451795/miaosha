@@ -75,7 +75,6 @@ public class MiaoshaUserService {
 
             String token = UUIDUtil.uuid();
             addCookie(response, token, user);
-        System.out.println(token);
         return token;
     }
 

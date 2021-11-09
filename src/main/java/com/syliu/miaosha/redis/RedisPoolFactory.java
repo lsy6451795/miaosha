@@ -1,7 +1,10 @@
 package com.syliu.miaosha.redis;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
 import redis.clients.jedis.JedisPool;
 import redis.clients.jedis.JedisPoolConfig;
@@ -20,4 +23,5 @@ public class RedisPoolFactory {
                 redisConfig.getTimeout()*1000,redisConfig.getPassword(),0);
         return jedisPool;
     }
+//
 }

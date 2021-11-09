@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
+import java.util.concurrent.TimeoutException;
 
 
 @ControllerAdvice//切面拦截异常
@@ -28,7 +29,11 @@ public class GlobalExceptionController {
             ObjectError error=errors.get(0);
             String msg=error.getDefaultMessage();
             return Result.error(CodeMsg.BIND_ERROR.fillArgs(msg));
-        }else{
+        }else if(e instanceof TimeoutException){
+
+            return Result.error(CodeMsg.OVER_VISIT);
+        }
+        else{
             return Result.error(CodeMsg.SERVER_ERROR);
         }
     }
