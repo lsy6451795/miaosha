@@ -77,7 +77,7 @@ public class MiaoshaService {
         redisService.set(MiaoshaKey.getMiaoshaPath,""+user.getId()+""+goodsId,str);
         return str;
     }
-
+     //验证码实现
     public BufferedImage createVerifyCodeImage(MiaoshaUser user, long goodsId) {
         int width = 80;
         int height = 32;

@@ -1,5 +1,6 @@
 package com.syliu.miaosha.RateLimit;
 
+import com.alibaba.fastjson.JSONObject;
 import com.syliu.miaosha.MainApplication;
 import com.syliu.miaosha.config.ApplicationContextUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,6 +10,7 @@ import redis.clients.jedis.JedisPool;
 import redis.clients.jedis.exceptions.JedisDataException;
 
 
+import javax.validation.constraints.Null;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -71,11 +73,11 @@ public class RedisLimiterUtils {
 //        List<String> keyList = new ArrayList<>(1);
 //        keyList.add(realkey);
         String realkey=key+":limit";
-
+        Long eval =0L;
         Jedis resource = null;
         try{
             resource=jedisPool.getResource();
-            Long eval = (Long) resource.eval(TEXT, 1, realkey, Integer.toString(max), Integer.toString(rate), Long.toString(System.currentTimeMillis()));
+            eval=(Long) resource.eval(TEXT, 1, realkey, Integer.toString(max), Integer.toString(rate), Long.toString(System.currentTimeMillis()));
             if(eval==1)
             return true;
             else return false;
