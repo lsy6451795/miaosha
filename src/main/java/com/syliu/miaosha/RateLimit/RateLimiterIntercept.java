@@ -19,6 +19,7 @@ import java.util.concurrent.TimeoutException;
 public class RateLimiterIntercept implements HandlerInterceptor {
     @Autowired
     private  RedisLimiterUtils redisLimiterUtils;
+
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
        if(handler instanceof HandlerMethod){
@@ -37,15 +38,10 @@ public class RateLimiterIntercept implements HandlerInterceptor {
            if(Objects.isNull(rateLimit)){
                return true;
            }
-           String cookietoken=getCookieValue(request, MiaoshaUserService.Cookie_Name_token);
-           String paramtoken=request.getParameter(MiaoshaUserService.Cookie_Name_token);
-           if(StringUtils.isEmpty(cookietoken)&&StringUtils.isEmpty(paramtoken))return false;
-           String token=StringUtils.isEmpty(cookietoken)?paramtoken:cookietoken;
-
-               if (!redisLimiterUtils.tryAcquire(token, rateLimit.capacity(), rateLimit.rate())) {
-                   //抛出请求超时的异常
-                   throw new TimeoutException();
-               }
+           if (!redisLimiterUtils.tryAcquire(request.getRequestURI(), rateLimit.capacity(), rateLimit.rate())) {
+               //抛出请求超时的异常
+               throw new TimeoutException();
+           }
 
        }
        return  true;
@@ -53,14 +49,5 @@ public class RateLimiterIntercept implements HandlerInterceptor {
 
 
     }
-    private String getCookieValue(HttpServletRequest request, String cookie_name_token) {
-        Cookie[] cookies = request.getCookies();
-        if(cookies==null||cookies.length<=0)return  null;
-        for (Cookie cookie:cookies
-        ) {
-            if(cookie.getName().equals(cookie_name_token))return cookie.getValue();
 
-        }
-        return null;
-    }
 }
